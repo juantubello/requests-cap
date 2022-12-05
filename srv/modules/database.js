@@ -11,7 +11,6 @@ function getCredentials() {
     credentials = env.services["postgresql-db"][0].credentials
     return credentials;
   }
-
   credentials = {
     hostname: process.env.HOSTNAME,
     port: process.env.PORT,
@@ -24,7 +23,7 @@ function getCredentials() {
 
 const credentials = getCredentials();
  
-const pool =new Pool({
+const pool = new Pool({
   host: credentials.hostname,
   port: credentials.port,
   database: credentials.dbname,

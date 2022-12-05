@@ -6,9 +6,9 @@ using {
 namespace requestspace;
 
 entity requests : managed {
-  id          : Integer;
-  status      : String;
-  description : String;
-  cuit        : String;
-  name        : String;
+  key id          : Integer;
+      status      : String;
+      description : String;
+      cuit        : String;
+      name        : String;
 }
