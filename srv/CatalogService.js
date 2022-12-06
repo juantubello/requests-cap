@@ -30,23 +30,22 @@ async function createRequest(req) {
         type            : req.data.type,
         date            : req.data.date
     }
-    const response = await requestModule.createRequest(params)
+    const id = await requestModule.createRequest(params)
+    req.data.id = id;
     return req.data;
 }
 
 async function getRequest(req) {
-    const response = await requestModule.getRequests()
+    const id = req.data.id
+    const response = await requestModule.getRequests(id)
     return response;
 }
 
 module.exports = (srv) => {
-
     srv.on('READ', 'requests', async req => {
         return getRequest(req)
     })
-
     srv.on('INSERT', 'requests', async req => {
         return createRequest(req)
     })
-
 }

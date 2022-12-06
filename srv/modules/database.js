@@ -57,7 +57,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await pool.query(sql);
-        resolve("Record inserted!");
+        resolve(result.rows[0].id);
       }
       catch (ex) {
         reject("We messed up! " + ex);
