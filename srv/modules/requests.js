@@ -8,17 +8,14 @@ module.exports = {
         return new Promise(async function (resolve, reject) {
             let dbdata;
             const isWithFilters = id ? true : false
-
             if (isWithFilters) {
                 dbdata = await database.select(`SELECT * FROM requests where id = ${id}`);
             } else {
                 dbdata = await database.select('SELECT * FROM requests');
             }
-
             resolve(dbdata)
         });
     },
-
     async createRequest(request) {
         return new Promise(async function (resolve, reject) {
             const fields = `name, differenciators, benchmark, price_from, tec_spec, hs_code, image, expected, market_obj, market_exp, channel, market_dif, nif, country, email, telephone, empl_num, sales_from, sales_to, industry, target, status, type, date`;
@@ -27,5 +24,10 @@ module.exports = {
             resolve(id)
         });
     },
-
+    async updateRequest(request) {
+        return new Promise(async (resolve, reject) => {
+            const id = await database.update(`UPDATE requests SET status = '${request.status}' WHERE id = ${request.id};`);
+            resolve("Record updated!")        
+        });
+    }
 }

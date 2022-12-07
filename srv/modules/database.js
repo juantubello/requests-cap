@@ -22,7 +22,7 @@ function getCredentials() {
 }
 
 const credentials = getCredentials();
- 
+
 const pool = new Pool({
   host: credentials.hostname,
   port: credentials.port,
@@ -30,7 +30,7 @@ const pool = new Pool({
   user: credentials.username,
   password: credentials.password,
   ssl: {
-    require: true, 
+    require: true,
     rejectUnauthorized: false
   }
 });
@@ -40,7 +40,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await pool.query(sql); // <-- Notice here
-        const DBresponse = result.rows.map( row => {
+        const DBresponse = result.rows.map(row => {
           let str = JSON.stringify(row)
           let parsed = JSON.parse(str);
           return parsed;
@@ -53,11 +53,22 @@ module.exports = {
       }
     });
   },
-  async create(sql){
+  async create(sql) {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await pool.query(sql);
         resolve(result.rows[0].id);
+      }
+      catch (ex) {
+        reject("We messed up! " + ex);
+      }
+    });
+  },
+  async update(sql) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await pool.query(sql);
+        resolve('Record updated!');
       }
       catch (ex) {
         reject("We messed up! " + ex);
