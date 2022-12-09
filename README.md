@@ -15,10 +15,10 @@ File or Folder | Purpose
 
 ## Next Steps
 
+- If your DB instance is running on a PaaS, foward it to a local port, and set de "dev" enviroment to pick the local .env credentials
 - Open a new terminal and run `cds watch` 
 - (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
 - Start adding content, for example, a [db/schema.cds](db/schema.cds).
-
 
 ## Learn More
 
