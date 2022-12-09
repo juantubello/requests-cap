@@ -13,7 +13,7 @@ function getCredentials() {
   }
   credentials = {
     hostname: process.env.HOSTNAME,
-    port: process.env.PORT,
+    port: process.env.PORTNUMBER,
     dbname: process.env.DBNAME,
     username: process.env.USERNAME,
     password: process.env.PASSWORD,
