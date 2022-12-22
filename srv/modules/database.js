@@ -39,7 +39,7 @@ module.exports = {
   async select(sql) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await pool.query(sql); // <-- Notice here
+        const result = await pool.query(sql);
         const DBresponse = result.rows.map(row => {
           let str = JSON.stringify(row)
           let parsed = JSON.parse(str);

@@ -39,6 +39,14 @@ async function getRequest(req) {
     const response = await requestModule.getRequests(id)
     return response;
 }
+async function getClients(req) {
+    // const id = req.data.id
+    // const response = await requestModule.getRequests(id)
+    return {
+        id: 12345,
+        name: "ClientName"
+    };
+}
 async function updateRequest(req) {
     const params = {
         id: req.data.id,
@@ -50,6 +58,9 @@ async function updateRequest(req) {
 module.exports = (srv) => {
     srv.on('READ', 'requests', async req => {
         return getRequest(req)
+    })
+    srv.on('READ', 'clients', async req => {
+        return getClients(req)
     })
     srv.on('INSERT', 'requests', async req => {
         return createRequest(req)

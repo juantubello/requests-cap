@@ -3,7 +3,6 @@ const database = require('./database');
 dotenv.config();
 
 module.exports = {
-
     async getRequests(id) {
         return new Promise(async function (resolve, reject) {
             let dbdata;

@@ -32,3 +32,8 @@ entity requests : managed {
       type            : String;
       date            : String;
 }
+
+entity clients : managed {
+  key id   : Integer;
+      name : String;
+}
