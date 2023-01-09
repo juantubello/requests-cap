@@ -33,7 +33,17 @@ entity requests : managed {
       date            : String;
 }
 
-entity clients : managed {
-  key id   : Integer;
-      name : String;
+entity companies : managed {
+  key id              : Integer;
+      name            : String;
+      nif             : String;
+      country         : String;
+      email           : String;
+      telephone       : String;
+      empl_num        : String;
+      sales_from      : String;
+      sales_to        : String;
+      industry        : String;
+      target          : String;
+      date            : String;
 }

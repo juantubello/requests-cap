@@ -10,7 +10,7 @@ module.exports = {
             if (isWithFilters) {
                 dbdata = await database.select(`SELECT * FROM requests where id = ${id}`);
             } else {
-                dbdata = await database.select('SELECT * FROM requests');
+                dbdata = await database.select('SELECT * FROM requests ORDER BY id');
             }
             resolve(dbdata)
         });
@@ -28,5 +28,12 @@ module.exports = {
             const id = await database.update(`UPDATE requests SET status = '${request.status}' WHERE id = ${request.id};`);
             resolve("Record updated!")        
         });
-    }
+    },
+    async getCompanies() {
+        return new Promise(async function (resolve, reject) {
+            let dbdata;
+            dbdata = await database.select('SELECT * FROM companies ORDER BY id');
+            resolve(dbdata)
+        });
+    },
 }

@@ -30,6 +30,8 @@ async function createRequest(req) {
         type: req.data.type,
         date: req.data.date
     }
+    params.date = new Date().toLocaleString().split(',')[0];
+    params.status = 'P';
     const id = await requestModule.createRequest(params)
     req.data.id = id;
     return req.data;
@@ -39,13 +41,14 @@ async function getRequest(req) {
     const response = await requestModule.getRequests(id)
     return response;
 }
-async function getClients(req) {
+async function getCompanies(req) {
     // const id = req.data.id
-    // const response = await requestModule.getRequests(id)
-    return {
-        id: 12345,
-        name: "ClientName"
-    };
+    const response = await requestModule.getCompanies()
+    return response;
+    // return {
+    //     id: 12345,
+    //     name: "ClientName"
+    // };
 }
 async function updateRequest(req) {
     const params = {
@@ -59,8 +62,8 @@ module.exports = (srv) => {
     srv.on('READ', 'requests', async req => {
         return getRequest(req)
     })
-    srv.on('READ', 'clients', async req => {
-        return getClients(req)
+    srv.on('READ', 'companies', async req => {
+        return getCompanies(req)
     })
     srv.on('INSERT', 'requests', async req => {
         return createRequest(req)
