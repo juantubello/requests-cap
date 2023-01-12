@@ -4,5 +4,6 @@ service CatalogService @( path : '/Service'){
 
     entity requests as projection on requestspace.requests;
     entity companies as projection on requestspace.companies;
+    entity products as projection on requestspace.products;
     
 }

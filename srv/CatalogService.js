@@ -28,7 +28,10 @@ async function createRequest(req) {
         target: req.data.target,
         status: req.data.status,
         type: req.data.type,
-        date: req.data.date
+        date: req.data.date,
+        simulationcompany: req.data.simulationcompany,
+        simulationproduct: req.data.simulationproduct,
+        simulationproposal: req.data.simulationproposal
     }
     params.date = new Date().toLocaleString().split(',')[0];
     params.status = 'P';
@@ -41,14 +44,15 @@ async function getRequest(req) {
     const response = await requestModule.getRequests(id)
     return response;
 }
-async function getCompanies(req) {
-    // const id = req.data.id
-    const response = await requestModule.getCompanies()
+async function getProducts(req) {
+    const id = req.data.id
+    const response = await requestModule.getProducts(id)
     return response;
-    // return {
-    //     id: 12345,
-    //     name: "ClientName"
-    // };
+}
+async function getCompanies(req) {
+    const id = req.data.id
+    const response = await requestModule.getCompanies(id)
+    return response;
 }
 async function updateRequest(req) {
     const params = {
@@ -64,6 +68,9 @@ module.exports = (srv) => {
     })
     srv.on('READ', 'companies', async req => {
         return getCompanies(req)
+    })
+    srv.on('READ', 'products', async req => {
+        return getProducts(req)
     })
     srv.on('INSERT', 'requests', async req => {
         return createRequest(req)
