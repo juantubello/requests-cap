@@ -4,10 +4,8 @@ const requestModule = require('./modules/requests');
 dotenv.config()
 
 async function createRequest(req) {
-    // name: req.data.name
-    const params = req.data 
+    const params = req.data
     params.date = new Date().toLocaleString().split(',')[0];
-    // params.request.date = new Date().toLocaleString().split(',')[0];
     params.status = 'P';
     const id = await requestModule.createRequest(params)
     req.data.id = id;
@@ -36,6 +34,14 @@ async function updateRequest(req) {
     const response = await requestModule.updateRequest(params);
     return req.data;
 }
+async function getCountries(req) {
+    const data = await requestModule.getCountries()
+    return data
+}
+async function getIndustries(req) {
+    const data = await requestModule.getIndustries()
+    return data
+}
 module.exports = (srv) => {
     srv.on('READ', 'requests', async req => {
         return getRequest(req)
@@ -51,5 +57,11 @@ module.exports = (srv) => {
     })
     srv.on('UPDATE', 'requests', async req => {
         return updateRequest(req)
+    })
+    srv.on('READ', 'countries', async req => {
+        return getCountries(req)
+    })
+    srv.on('READ', 'industries', async req => {
+        return getIndustries(req)
     })
 }

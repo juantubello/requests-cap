@@ -70,5 +70,23 @@ module.exports = {
             }
             resolve(dbdata)
         });
-    }
+    },
+    async getCountries() {
+        return new Promise(async (resolve, reject) => {
+            let dbdata
+            try {
+                dbdata = await database.select(`SELECT * FROM countries`)
+                resolve(dbdata)
+            } catch (err) { reject(err) }
+        })
+    },
+    async getIndustries() {
+        return new Promise(async (resolve, reject) => {
+            let dbdata
+            try {
+                dbdata = await database.select(`SELECT * FROM industries`)
+                resolve(dbdata)
+            } catch (err) { reject(err) }
+        })
+     }
 }

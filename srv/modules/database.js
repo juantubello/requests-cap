@@ -6,19 +6,19 @@ dotenv.config()
 
 function getCredentials() {
   let credentials;
-  // if (process.env.ENVIROMENT === "prd") {
+   if (process.env.ENVIROMENT === "prd") {
     const env = cfenv.getAppEnv();
     credentials = env.services["postgresql-db"][0].credentials
     return credentials;
-  // }
-  // credentials = {
-  //   hostname: process.env.HOSTNAME,
-  //   port: process.env.PORTNUMBER,
-  //   dbname: process.env.DBNAME,
-  //   username: process.env.USERNAME,
-  //   password: process.env.PASSWORD,
-  // }
-  // return credentials;
+   }
+   credentials = {
+     hostname: process.env.HOSTNAME,
+     port: process.env.PORTNUMBER,
+     dbname: process.env.DBNAME,
+     username: process.env.USERNAME,
+     password: process.env.PASSWORD,
+   }
+   return credentials;
 }
 
 const credentials = getCredentials();

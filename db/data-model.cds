@@ -128,3 +128,15 @@ entity products : managed {
       channel         : String;
       market_dif      : String;
 }
+
+entity countries : managed {
+  key country_id  : String;
+      description : String;
+}
+
+entity industries : managed {
+  industry_type     : String;
+  industry_subtype  : String;
+  industry_typed    : String;
+  industry_subtyped : String;
+}
