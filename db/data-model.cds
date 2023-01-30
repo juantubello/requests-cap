@@ -135,8 +135,8 @@ entity countries : managed {
 }
 
 entity industries : managed {
-  industry_type     : String;
-  industry_subtype  : String;
-  industry_typed    : String;
-  industry_subtyped : String;
+  key industry_type     : String;
+  key industry_subtype  : String;
+      industry_typed    : String;
+      industry_subtyped : String;
 }
