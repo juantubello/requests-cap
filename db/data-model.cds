@@ -56,7 +56,7 @@ entity requests : managed {
       committment_9    : Boolean;
       status           : String;
       type             : String;
-      email            : String;
+  key email            : String;
       date             : String;
 }
 

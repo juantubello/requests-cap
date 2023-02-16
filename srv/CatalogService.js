@@ -12,9 +12,30 @@ async function createRequest(req) {
     return req.data;
 }
 async function getRequest(req) {
+    console.log(req.headers.email)
     const id = req.data.id
-    const response = await requestModule.getRequests(id)
+    const email = req.data.email
+    console.log(email)
+    const response = await requestModule.getRequest(id)
     return response;
+}
+async function getRequests(req) {
+    let isEntity = false, response
+    if (req.data.hasOwnProperty("id")) {
+        isEntity = true
+    }
+    try {
+        if (isEntity) {
+            response = await requestModule.getRequest(req.data)
+        }
+        else {
+            response = await requestModule.getRequests(req._query.$filter)
+        }
+        return response;
+    }
+    catch (err) {
+        return err
+    }
 }
 async function getProducts(req) {
     const id = req.data.id
@@ -44,7 +65,7 @@ async function getIndustries(req) {
 }
 module.exports = (srv) => {
     srv.on('READ', 'requests', async req => {
-        return getRequest(req)
+        return getRequests(req)
     })
     srv.on('READ', 'companies', async req => {
         return getCompanies(req)

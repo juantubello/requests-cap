@@ -1,5 +1,7 @@
 const dotenv = require('dotenv');
 const database = require('./database');
+const ADMIN = 'ADMIN'
+const USER = 'USER'
 
 dotenv.config();
 
@@ -18,16 +20,113 @@ function createValues(query) {
     return formattedValues
 }
 
+/**
+ * Esta función toma una cadena de texto que representa una consulta con formato OData,
+ * extrae los componentes de la consulta (campo, operador y valor), y devuelve un array
+ * de objetos que contienen estos componentes.
+ *
+ * El regex utilizado busca palabras de caracteres de palabra seguidas por el operador "eq"
+ * y una cadena de caracteres entre comillas simples, o un número entero. Los componentes
+ * encontrados se almacenan en objetos y se agregan a un array de salida.
+ *
+ * @param {string} input - La cadena de texto que representa la consulta.
+ * @returns {Object[]} - Un array de objetos que contienen los componentes de la consulta.
+ */
+function parseInput(input) {
+    const regex = /(\w+)\s(eq)\s('.*?'|\d+)/g;
+    const matches = input.matchAll(regex);
+    const output = [];
+
+    for (const match of matches) {
+        const field = match[1];
+        const operator = match[2];
+        let value = match[3].replace(/'/g, '');
+        if (!isNaN(value)) {
+            value = parseInt(value);
+        }
+        output.push({ field, operator, value });
+    }
+
+    return output;
+}
+
+/**
+ * Esta función recibe un arreglo de objetos que contienen los campos "field", "operator" y "value",
+ * y devuelve el objeto que cumple con la condición de tener el campo "field" igual a "email".
+ * Si no encuentra ningún objeto que cumpla la condición, devuelve null.
+ */
+function getFilterValues(input, field) {
+    for (let i = 0; i < input.length; i++) {
+        if (input[i].field === field) {
+            return input[i];
+        }
+    }
+    return null;
+}
+
+function getUserCategory(email) {
+    const emailLength = email.length;
+    const emailTrim = email.trim().length;
+    const category = emailLength - emailTrim;
+    if (category === 1) {
+        return "Access Denied. You don't have authorization";
+    }
+    if (category === 0) {
+        return USER;
+    }
+    if (category === 2) {
+        return ADMIN;
+    }
+}
+
 module.exports = {
-    async getRequests(id) {
+    async getRequest(data) {
         return new Promise(async function (resolve, reject) {
             let dbdata;
-            const isWithFilters = id ? true : false
-            if (isWithFilters) {
-                dbdata = await database.select(`SELECT * FROM requestsv2 where id = ${id}`);
-            } else {
-                dbdata = await database.select('SELECT * FROM requestsv2 ORDER BY id');
+            const category = getUserCategory(data.email)
+            if (category === ADMIN || category === USER) {
+                dbdata = await database.select(`SELECT * FROM requestsv2 where id = ${data.id}`);
             }
+            resolve(dbdata)
+        });
+    },
+    async getRequests(request) {
+        return new Promise(async function (resolve, reject) {
+            let query = '';
+            let isWithFilters = false
+            const parsedRequest = parseInput(request)
+            const id = getFilterValues(parsedRequest, 'id');
+            const email = getFilterValues(parsedRequest, 'email');
+
+            if (id !== null) {
+                isWithFilters = true
+            }
+
+            const category = getUserCategory(email.value)
+
+            switch (category) {
+                case ADMIN:
+                    if (isWithFilters) {
+                        query = `SELECT * FROM requestsv2 where id = ${id.value}`
+                    }
+                    else {
+                        query = 'SELECT * FROM requestsv2 ORDER BY id'
+                    }
+                    break
+
+                case USER:
+                    if (isWithFilters) {
+                        query = `SELECT * FROM requestsv2 where id = ${id.value} and email = '${email.value.trim()}'`
+                    }
+                    else {
+                        query = `SELECT * FROM requestsv2 where email = '${email.value.trim()}' ORDER BY id`
+                    }
+                    break
+            }
+            if (query.length < 1) {
+                reject(category)
+            }
+            const dbdata = await database.select(query);
             resolve(dbdata)
         });
     },
@@ -88,5 +187,5 @@ module.exports = {
                 resolve(dbdata)
             } catch (err) { reject(err) }
         })
-     }
+    }
 }
