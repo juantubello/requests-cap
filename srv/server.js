@@ -7,7 +7,7 @@ const HOST = '0.0.0.0';
 
 cds.on("bootstrap", app => {
     app.use(cors());
-    app.use(proxy({ path: "v2"}));
+    app.use(proxy({ path: "v2", port:PORT, host:HOST }));
 })
 
 module.exports = cds.server;
